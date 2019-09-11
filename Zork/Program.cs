@@ -10,6 +10,7 @@ namespace Zork
 
             string inputString = Console.ReadLine();
             inputString = inputString.ToUpper();
+
             if (inputString == "QUIT")
             {
                 Console.WriteLine("Thank you for playing.");
@@ -22,5 +23,6 @@ namespace Zork
             {
                 Console.WriteLine("Unrecognized command.");
             }
+        }
     }
 }
