@@ -4,6 +4,13 @@ namespace Zork
 {
     class Program
     {
+        private static readonly string[,] Rooms =
+        {
+            { "rocky Trail", "South of House", "Canyon View" },
+            { "Forest", "West of House", "Behind House" },
+            { "Dense Woods", "North of House", "Clearing" }
+        };
+
         static void Main(string[] args)
         {
             Console.WriteLine("Welcome to Zork!");
@@ -41,6 +48,23 @@ namespace Zork
             }
 
         }
+
+        /*
+        private bool Move(Commands dir)
+        {
+            if (dir == NORTH || dir == SOUTH || dir == WEST || dir == EAST)
+            {
+                switch (dir)
+                {
+
+                }
+            }
+            else {
+                
+            }
+        }
+          
+        */
 
 
 
