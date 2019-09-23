@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Zork
 {
@@ -73,7 +74,8 @@ namespace Zork
         
         private static bool Move(Commands command)
         {
-            
+            Assert.IsTrue(IsADirection(command), "Invalid direction.");
+
             bool canMove = false;
 
             switch (command)
@@ -118,5 +120,19 @@ namespace Zork
             return Enum.TryParse(commandString, true, out Commands result) ? result : Commands.UNKNOWN;
 
         }
+
+        private static readonly List<Commands> Directions = new List<Commands>
+        {
+            Commands.NORTH,
+            Commands.SOUTH,
+            Commands.EAST,
+            Commands.WEST
+        };
+
+        private static bool IsADirection(Commands command) => Directions.Contains(command);
+
+
+
+
     }
 }
