@@ -4,29 +4,32 @@ namespace Zork
 {
     class Program
     {
-        /*
-        private static readonly string[,] Rooms =
+        
+        private static string PlayerRoom
         {
-            { "Rocky Trail", "South of House", "Canyon View" },
-            { "Forest", "West of House", "Behind House" },
-            { "Dense Woods", "North of House", "Clearing" }
-        };
-        */
+            get
+            {
+                return Rooms[LateralPos];
+            }
+        }
 
+        private static int LateralPos = (1);
+       
+        
         private static readonly string[] Rooms =
          {
             "Forest", "West of House", "Behind House", "Clearing", "Canyon View"
         };
-
+        
         static void Main(string[] args)
         {
             Console.WriteLine("Welcome to Zork!");
-            int i = 1;
+            //int i = 1;
 
             Commands command = Commands.UNKNOWN;
             while (command != Commands.QUIT)
             {
-                Console.Write(Rooms[i] + "\n");
+                Console.WriteLine(PlayerRoom);
                 Console.Write("> ");
                 command = ToCommand(Console.ReadLine().Trim());
 
@@ -46,6 +49,7 @@ namespace Zork
                         {
                             outputString = "The way is shut! \n";
                         }
+                        /*
                         else if (command == Commands.EAST)
                         {
                             i++;
@@ -54,7 +58,11 @@ namespace Zork
                         {
                             i--;
                         }
-                        outputString = $"You moved {command}.";
+                        */
+                        else
+                        {
+                            outputString = $"You moved {command}.";
+                        }
                         break;
 
                     case Commands.QUIT:
@@ -81,14 +89,19 @@ namespace Zork
             {
 
                 case Commands.NORTH:
-                case Commands.SOUTH:
-                case Commands.WEST:
+                    break;
 
-                case Commands.EAST:
-                    if (i < Rooms.Length)
-                    {
-                        canMove = true;
-                    }
+                case Commands.SOUTH:
+                    break;
+
+                case Commands.WEST when LateralPos > 0 :
+                    LateralPos--;
+                    canMove = true;
+                    break;
+
+                case Commands.EAST when LateralPos < Rooms.GetLength(0) - 1 :
+                    LateralPos++;
+                    canMove = true;
                     break;
 
                 default:
