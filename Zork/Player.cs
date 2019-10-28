@@ -16,6 +16,7 @@ namespace Zork
 
         [JsonIgnore]
 
+        public int Moves = 0;
 
         public string LocationName
         {
