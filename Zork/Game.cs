@@ -1,20 +1,27 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using Newtonsoft.Json;
 using static Zork.Player;
+using Microsoft.CodeAnalysis.CSharp.Scripting;
+using Microsoft.CodeAnalysis.Scripting;
+using System.Text;
 
 namespace Zork
 {
     public class Game
     {
+        [JsonIgnore]
+        public static Game Instance { get; private set; }
         public World World { get; set; }
 
         [JsonIgnore]
         public Player Player { get; private set; }
 
         [JsonIgnore]
-        private bool IsRunning { get; set; }
+        private bool IsRunning { get; }
 
         [JsonIgnore]
         public CommandManager CommandManager { get; }
@@ -25,38 +32,35 @@ namespace Zork
             Player = player;
         }
 
-        public Game()
+        public Game() => CommandManager = new CommandManager();
+
+        public static void Start(string gameFilename)
         {
-            Command[] commands =
+            if (!File.Exists(gameFilename))
             {
-                new Command("LOOK", new string[] { "LOOK", "L"},
-                    (game, CommandContext) => Console.WriteLine(game.Player.Location.Description)),
+                throw new FileNotFoundException("Expected file.", gameFilename);
+            }
 
-                new Command("QUIT", new string[] { "QUIT", "Q" },
-                    (game, CommandContext) => game.IsRunning = false),
-
-                new Command("NORTH", new string[] { "NORTH", "N" }, MovementCommands.North),
-
-                new Command("SOUTH", new string[] { "SOUTH", "S" }, MovementCommands.South),
-
-                new Command("EAST", new string[] { "EAST", "E" }, MovementCommands.East),
-
-                new Command("WEST", new string[] { "WEST", "W" }, MovementCommands.West)
-
-            };
-
-            CommandManager = new CommandManager(commands);
-
+            while (Instance == null || Instance.mIsRestarting)
+            {
+                Instance = Load(gameFilename);
+                Instance.LoadCommands();
+                Instance.LoadScripts();
+                Instance.DisplayWelcomeMessage();
+                Instance.Run();
+            }
         }
+
+        
 
 
 
         public void Run ()
         {
 
-            IsRunning = true;
+            mIsRunning = true;
             Room previousRoom = null;
-            while (IsRunning)
+            while (mIsRunning)
             {
                 Console.WriteLine(Player.Location);
                 if (previousRoom != Player.Location)
@@ -72,11 +76,20 @@ namespace Zork
                 }
                 else
                 {
-                    Console.WriteLine("That's not a verb I recognie.");
+                    Console.WriteLine("That's not a verb I recognize.");
                 }
 
             }
         }
+
+        public void Restart()
+        {
+            mIsRunning = false;
+            mIsRestarting = true;
+            Console.Clear();
+        }
+
+        public void Quit() => mIsRunning = false;
 
         public static Game Load(string filename)
         {
@@ -86,7 +99,53 @@ namespace Zork
             return game;
         }
 
-        
+        private void LoadCommands()
+        {
+            var commandMethods = (from type in Assembly.GetExecutingAssembly().GetTypes()
+                                  from method in type.GetMethods()
+                                  let attribute = method.GetCustomAttribute<CommandAttribute>()
+                                  where type.IsClass && type.GetCustomAttribute<CommandClassAttribute>() != null
+                                  where attribute != null
+                                  select new Command(attribute.CommandName, attribute.Verbs,
+                                  (Action<Game, CommandContext>)Delegate.CreateDelegate(typeof(Action<Game, CommandContext>), method)));
+
+            CommandManager.AddCommands(commandMethods);
+        }
+
+        private void LoadScripts()
+        {
+            foreach (string file in Directory.EnumerateFiles(ScriptDirectory, ScriptFileExtension))
+            {
+                try
+                {
+                    var scriptOptions = ScriptOptions.Default.AddReferences(Assembly.GetExecutingAssembly());
+
+                    scriptOptions = scriptOptions.WithEmitDebugInformation(true)
+                                    .WithFilePath(new FileInfo(file).FullName)
+                                    .WithFileEncoding(Encoding.UTF8);
+
+                    string script = File.ReadAllText(file);
+                    CSharpScript.RunAsync(script, scriptOptions).Wait();
+                }
+
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error compiling script: {file} Error: {ex.Message}");
+                }
+            }
+        }
+
+        private void DisplayWelcomeMessage() => Console.WriteLine(WelcomeMessage);
+
+        public static readonly Random Random = new Random();
+        private static readonly string ScriptDirectory = "Scripts";
+        private static readonly string ScriptFileExtension = "*.csx";
+
+        [JsonProperty]
+        private string WelcomeMessage = null;
+
+        private bool mIsRunning;
+        private bool mIsRestarting;
 
     }
 }
