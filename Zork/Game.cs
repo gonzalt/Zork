@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json;
-using static Zork.Player;
+using System.Text;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
-using System.Text;
 
 namespace Zork
 {
@@ -119,10 +117,11 @@ namespace Zork
                 try
                 {
                     var scriptOptions = ScriptOptions.Default.AddReferences(Assembly.GetExecutingAssembly());
-
+#if DEBUG
                     scriptOptions = scriptOptions.WithEmitDebugInformation(true)
                                     .WithFilePath(new FileInfo(file).FullName)
                                     .WithFileEncoding(Encoding.UTF8);
+#endif
 
                     string script = File.ReadAllText(file);
                     CSharpScript.RunAsync(script, scriptOptions).Wait();
@@ -131,6 +130,29 @@ namespace Zork
                 catch (Exception ex)
                 {
                     Console.WriteLine($"Error compiling script: {file} Error: {ex.Message}");
+                }
+            }
+        }
+
+
+        public bool ConfirmAction(string prompt)
+        {
+            Console.Write(prompt);
+
+            while (true)
+            {
+                string response = Console.ReadLine().Trim().ToUpper();
+                if (response == "YES" || response == "Y")
+                {
+                    return true;
+                }
+                else if (response == "NO" || response == "N")
+                {
+                    return false;
+                }
+                else
+                {
+                    Console.Write("Please answer yes or no.> ");
                 }
             }
         }
