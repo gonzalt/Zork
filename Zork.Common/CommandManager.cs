@@ -24,6 +24,7 @@ namespace Zork
         {
             bool result;
             CommandContext commandContext = Parse(commandString);
+            //Fix order?
             if (commandContext.Command != null)
             {
                 commandContext.Command.Action(game, commandContext);

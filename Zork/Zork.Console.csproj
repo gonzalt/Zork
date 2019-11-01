@@ -23,4 +23,8 @@
     <Folder Include="Scripts\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Zork.Common\Zork.Common.csproj" />
+  </ItemGroup>
+
 </Project>
