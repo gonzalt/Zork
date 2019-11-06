@@ -5,11 +5,13 @@ using System.Runtime.Serialization;
 using System.Linq;
 using Newtonsoft.Json;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 
 namespace Zork
 {
-    public class World
+    public class World : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public HashSet<Room> Rooms { get; set; }
 
