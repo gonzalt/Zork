@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETStandard,Version=v2.0/",
-    "signature": "4137f63d7a3c9b731d708386b3614af6600829cb"
+    "signature": "d41bf2d162bb0ed5cf19b5e76bef14d27390d86c"
   },
   "compilationOptions": {},
   "targets": {
@@ -11,12 +11,14 @@
         "dependencies": {
           "Microsoft.CodeAnalysis.CSharp.Scripting": "3.3.1",
           "NETStandard.Library": "2.0.3",
-          "Newtonsoft.Json": "12.0.2"
+          "Newtonsoft.Json": "12.0.2",
+          "PropertyChanged.Fody": "3.1.3"
         },
         "runtime": {
           "Zork.Common.dll": {}
         }
       },
+      "Fody/6.0.0": {},
       "Microsoft.CodeAnalysis.Analyzers/2.9.4": {},
       "Microsoft.CodeAnalysis.Common/3.3.1": {
         "dependencies": {
@@ -273,6 +275,18 @@
           "lib/netstandard2.0/Newtonsoft.Json.dll": {
             "assemblyVersion": "12.0.0.0",
             "fileVersion": "12.0.2.23222"
+          }
+        }
+      },
+      "PropertyChanged.Fody/3.1.3": {
+        "dependencies": {
+          "Fody": "6.0.0",
+          "NETStandard.Library": "2.0.3"
+        },
+        "runtime": {
+          "lib/netstandard1.0/PropertyChanged.dll": {
+            "assemblyVersion": "3.1.3.0",
+            "fileVersion": "3.1.3.0"
           }
         }
       },
@@ -616,6 +630,13 @@
       "serviceable": false,
       "sha512": ""
     },
+    "Fody/6.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-rH9Q7GapghyLYESfeCUOqh0S70eLc3FAikIgEEyGeng3JJf1M7mt2BUxjz93o3ipDXLrKn1s69AIEolmnVn8xg==",
+      "path": "fody/6.0.0",
+      "hashPath": "fody.6.0.0.nupkg.sha512"
+    },
     "Microsoft.CodeAnalysis.Analyzers/2.9.4": {
       "type": "package",
       "serviceable": true,
@@ -685,6 +706,13 @@
       "sha512": "sha512-rTK0s2EKlfHsQsH6Yx2smvcTCeyoDNgCW7FEYyV01drPlh2T243PR2DiDXqtC5N4GDm4Ma/lkxfW5a/4793vbA==",
       "path": "newtonsoft.json/12.0.2",
       "hashPath": "newtonsoft.json.12.0.2.nupkg.sha512"
+    },
+    "PropertyChanged.Fody/3.1.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-GaTTQdS8NCVMBrBGIu43XwyicIyD7iIp9zFLK57Q2kfba6BffMGt4bl0jwfkMysbdqUjP4oZcunvbQBauWieUQ==",
+      "path": "propertychanged.fody/3.1.3",
+      "hashPath": "propertychanged.fody.3.1.3.nupkg.sha512"
     },
     "System.Buffers/4.4.0": {
       "type": "package",

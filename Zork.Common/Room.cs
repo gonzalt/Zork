@@ -13,16 +13,16 @@ namespace Zork
         public event PropertyChangedEventHandler PropertyChanged;
 
         [JsonProperty(Order = 1)]
-        public string Name { get; private set;  }
+        public string Name { get; set;  }
 
         [JsonProperty(Order = 2)]
-        public string Description { get; private set; }
+        public string Description { get; set; }
 
         [JsonProperty(PropertyName = "Neighbors", Order = 3)]
-        private Dictionary<Directions, string> NeighborNames { get; set; }
+        public Dictionary<Directions, string> NeighborNames { get; set; }
 
         [JsonIgnore]
-        public IReadOnlyDictionary<Directions, Room> Neighbors { get; private set; }
+        public IReadOnlyDictionary<Directions, Room> Neighbors { get; set; }
 
         public static bool operator ==(Room lhs, Room rhs)
         {
@@ -54,6 +54,13 @@ namespace Zork
                                                                  where room != null
                                                                  select (Direction: entry.Key, Room: room))
                                                                  .ToDictionary(pair => pair.Direction, pair => pair.Room);
+
+		
+		public Room()
+		{
+			Name = new List<string>().ToString();
+		}
+		
 
     }
 }

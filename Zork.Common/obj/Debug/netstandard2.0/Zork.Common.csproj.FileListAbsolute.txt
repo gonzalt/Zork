@@ -7,3 +7,4 @@ C:\Users\ty547135\Desktop\Zork\Zork.Common\obj\Debug\netstandard2.0\Zork.Common.
 C:\Users\ty547135\Desktop\Zork\Zork.Common\bin\Debug\netstandard2.0\Zork.Common.pdb
 C:\Users\ty547135\Desktop\Zork\Zork.Common\obj\Debug\netstandard2.0\Zork.Common.dll
 C:\Users\ty547135\Desktop\Zork\Zork.Common\obj\Debug\netstandard2.0\Zork.Common.pdb
+C:\Users\ty547135\Desktop\Zork\Zork.Common\obj\Debug\netstandard2.0\Zork.Common.csproj.Fody.CopyLocal.cache
